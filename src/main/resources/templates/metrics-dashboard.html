@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>System Metrics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            padding: 40px;
+            background-color: #f8f9fa;
+        }
+        canvas {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+<h2>JVM Memory Usage</h2>
+<canvas id="memoryChart"></canvas>
+
+<script>
+    async function fetchData() {
+        const res = await fetch('/actuator/metrics/jvm.memory.used');
+        const data = await res.json();
+        return data.measurements[0].value;
+    }
+
+    async function renderChart() {
+        const value = await fetchData();
+        const ctx = document.getElementById('memoryChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Used Memory (MB)', 'Free Estimate'],
+                datasets: [{
+                    data: [value / (1024 * 1024), 1024 - (value / (1024 * 1024))],
+                    backgroundColor: ['#4CAF50', '#ddd'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    }
+
+    renderChart();
+</script>
+</body>
+</html>

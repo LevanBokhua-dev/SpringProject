@@ -73,6 +73,7 @@ public class LoginController {
 
         if (existing.isPresent()) {
             session.setAttribute("admin", admin.getUsername());
+            session.setAttribute("isAdmin", true); // ✅ Required for Actuator access
             return "redirect:/login/welcome-admin";
         }
 
