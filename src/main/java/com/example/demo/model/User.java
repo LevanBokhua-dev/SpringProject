@@ -1,7 +1,9 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +26,10 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference // 👈 allow serialization
     private List<Todo> todos = new ArrayList<>();
 
-
+    // Getters and setters
     public Long getId() { return id; }
 
     public void setId(Long id) { this.id = id; }

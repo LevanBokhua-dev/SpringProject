@@ -36,14 +36,12 @@ public class TodoController {
                           BindingResult result,
                           HttpSession session,
                           Model model) {
-
         if (result.hasErrors()) {
             return "todo-form";
         }
 
         String username = (String) session.getAttribute("user");
-        Optional<User> user = userRepository.findAll().stream()
-                .filter(u -> u.getUsername().equals(username)).findFirst();
+        Optional<User> user = userRepository.findByUsername(username);
 
         if (user.isPresent()) {
             todo.setUser(user.get());
@@ -54,13 +52,17 @@ public class TodoController {
         model.addAttribute("error", "User not found in session");
         return "todo-form";
     }
+    @GetMapping("/all")
+    public String listAllTodos(Model model) {
+        model.addAttribute("todos", todoRepository.findAll());
+        return "todo-list";
+    }
 
     @GetMapping("/list")
     public String listTodos(HttpSession session, Model model) {
         String username = (String) session.getAttribute("user");
 
-        Optional<User> user = userRepository.findAll().stream()
-                .filter(u -> u.getUsername().equals(username)).findFirst();
+        Optional<User> user = userRepository.findByUsername(username);
 
         if (user.isPresent()) {
             model.addAttribute("todos", todoRepository.findByUser(user.get()));
@@ -68,10 +70,7 @@ public class TodoController {
             model.addAttribute("todos", List.of());
         }
 
-        // ✅ Add the username to the model for the Thymeleaf page
         model.addAttribute("username", username);
-
         return "todo-list";
     }
-
 }
