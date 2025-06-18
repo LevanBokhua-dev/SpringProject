@@ -19,7 +19,6 @@ public class ActuatorAdminFilter implements Filter {
 
         String path = request.getRequestURI();
 
-        // Allow /health and /info to everyone
         if (path.startsWith("/actuator") &&
                 !path.equals("/actuator/health") &&
                 !path.equals("/actuator/info")) {

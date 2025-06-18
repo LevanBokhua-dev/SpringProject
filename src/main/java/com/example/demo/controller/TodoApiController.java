@@ -30,7 +30,11 @@ public class TodoApiController {
         }
         return ResponseEntity.notFound().build();
     }
-
+    @PostMapping("/new")
+    public ResponseEntity<Todo> createTodo(@RequestBody Todo todo) {
+        Todo saved = todoRepository.save(todo);
+        return ResponseEntity.ok(saved);
+    }
     @GetMapping("/all")
     public ResponseEntity<List<Todo>> getAllTodos() {
         return ResponseEntity.ok(todoRepository.findAll());
