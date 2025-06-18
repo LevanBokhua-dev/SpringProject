@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    active: dev  # Default profile, switch to prod in production
+
+app:
+  title: Default App Title

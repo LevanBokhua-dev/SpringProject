@@ -1,0 +1,4 @@
+app:
+  title: My App (Production)
+  datasource: MSSQL
+  debug-mode: false

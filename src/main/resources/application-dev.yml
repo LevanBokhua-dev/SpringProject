@@ -1,0 +1,4 @@
+app:
+  title: My App (Development)
+  datasource: H2
+  debug-mode: true
