@@ -12,30 +12,37 @@
         }
         canvas {
             max-width: 600px;
-            margin: 0 auto;
+            margin: 40px auto;
         }
     </style>
 </head>
 <body>
+
 <h2>JVM Memory Usage</h2>
 <canvas id="memoryChart"></canvas>
 
+<h2>System CPU Usage</h2>
+<canvas id="cpuChart"></canvas>
+
 <script>
-    async function fetchData() {
+    async function fetchMemoryUsed() {
         const res = await fetch('/actuator/metrics/jvm.memory.used');
         const data = await res.json();
         return data.measurements[0].value;
     }
 
-    async function renderChart() {
-        const value = await fetchData();
+    async function renderMemoryChart() {
+        const value = await fetchMemoryUsed();
+        const usedMB = value / (1024 * 1024);
+        const freeEstimate = 1024 - usedMB;
+
         const ctx = document.getElementById('memoryChart').getContext('2d');
         new Chart(ctx, {
             type: 'doughnut',
             data: {
                 labels: ['Used Memory (MB)', 'Free Estimate'],
                 datasets: [{
-                    data: [value / (1024 * 1024), 1024 - (value / (1024 * 1024))],
+                    data: [usedMB, freeEstimate],
                     backgroundColor: ['#4CAF50', '#ddd'],
                 }]
             },
@@ -48,7 +55,38 @@
         });
     }
 
-    renderChart();
+    async function fetchCpuUsage() {
+        const res = await fetch('/actuator/metrics/system.cpu.usage');
+        const data = await res.json();
+        return data.measurements[0].value;
+    }
+
+    async function renderCpuChart() {
+        const usage = await fetchCpuUsage();
+        const used = usage * 100;
+        const idle = 100 - used;
+
+        const ctx = document.getElementById('cpuChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['CPU Used (%)', 'CPU Idle (%)'],
+                datasets: [{
+                    data: [used, idle],
+                    backgroundColor: ['#FF9800', '#bbb'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    }
+
+    renderMemoryChart();
+    renderCpuChart();
 </script>
 </body>
 </html>

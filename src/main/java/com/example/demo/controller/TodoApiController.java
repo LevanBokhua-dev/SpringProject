@@ -39,4 +39,5 @@ public class TodoApiController {
     public ResponseEntity<List<Todo>> getAllTodos() {
         return ResponseEntity.ok(todoRepository.findAll());
     }
+
 }
