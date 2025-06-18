@@ -43,7 +43,7 @@ public class TodoApiIntegrationTests {
         todoRepository.deleteAll();
         userRepository.deleteAll();
 
-        // Create test user and todo
+        // Create test user and to do
         User user = new User();
         user.setUsername("testuser");
         user.setEmail("test@example.com");
@@ -62,14 +62,14 @@ public class TodoApiIntegrationTests {
 
     @Test
     void shouldCreateTodoForUser() {
-        // 1. Create a user to associate with the new Todo
+        // 1. Create a user to associate with the new To do
         User user = new User();
         user.setUsername("apitestuser");
         user.setEmail("api@example.com");
         user.setPassword("pass123");
         user = userRepository.save(user);
 
-        // 2. Prepare Todo JSON
+        // 2. Prepare To do JSON
         String todoJson = String.format(
                 "{\"title\":\"Test Via API\",\"description\":\"Created in test\",\"priority\":\"B\",\"user\":{\"id\":%d}}",
                 user.getId()
