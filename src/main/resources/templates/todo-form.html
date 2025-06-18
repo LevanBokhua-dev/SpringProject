@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>New Todo</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<div class="form-container">
+    <h1>Create a Todo</h1>
+    <form th:action="@{/todo/new}" th:object="${todo}" method="post">
+        <label>Title:</label>
+        <input type="text" th:field="*{title}" />
+        <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+
+        <label>Description:</label>
+        <input type="text" th:field="*{description}" />
+
+        <label>Priority (A, B, or C):</label>
+        <input type="text" th:field="*{priority}" />
+        <p th:if="${#fields.hasErrors('priority')}" th:errors="*{priority}"></p>
+
+        <button type="submit">Add Todo</button>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.welcome}">Welcome User</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .welcome-box {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            margin: 100px auto;
+            width: 400px;
+        }
+        .lang-switch {
+            margin-top: 20px;
+        }
+        .lang-switch a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="welcome-box">
+    <h2><span th:text="#{welcome.user} "></span><span th:text="${name}">User</span> 👋</h2>
+    <p th:text="#{login.success}">You have successfully logged in.</p>
+
+    <a href="/todo/list">
+        <button style="padding: 10px 20px; font-size: 16px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">
+            <span th:text="#{button.todo}">Go to Todo List</span>
+        </button>
+    </a>
+    <div class="lang-switch">
+        <a th:href="@{${currentUrl}(lang='ka')}">ქართული</a> |
+        <a th:href="@{${currentUrl}(lang='en')}">English</a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Registration Success</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .success-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 400px;
+            margin: 100px auto;
+        }
+        .success-box a {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background: #4a90e2;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+        }
+        .success-box a:hover {
+            background: #357ab8;
+        }
+    </style>
+</head>
+<body>
+<div class="success-box">
+    <h2>Registration successful!</h2>
+    <p>You can now log in to your account:</p>
+    <a th:if="${isAdmin}" th:href="@{/login/admin}">Login as Admin</a>
+    <a th:if="${!isAdmin}" th:href="@{/login/user}">Login as User</a>
+</div>
+</body>
+</html>
