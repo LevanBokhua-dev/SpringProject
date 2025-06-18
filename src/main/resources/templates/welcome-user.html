@@ -35,10 +35,29 @@
             <span th:text="#{button.todo}">Go to Todo List</span>
         </button>
     </a>
+
     <div class="lang-switch">
         <a th:href="@{${currentUrl}(lang='ka')}">ქართული</a> |
         <a th:href="@{${currentUrl}(lang='en')}">English</a> |
         <a th:href="@{${currentUrl}(lang='fr')}">French</a>
+    </div>
+
+    <!-- ✅ MOOD FORM -->
+    <form th:action="@{/login/set-mood}" method="post" style="margin-top: 30px;">
+        <label for="mood" style="display: block; margin-bottom: 10px; font-weight: bold;" th:text="#{mood.label}">Set your mood today 😊:</label>
+        <input type="text" id="mood" name="mood"
+               th:placeholder="#{mood.placeholder}"
+               required
+               style="padding: 10px; width: 80%; max-width: 280px; margin: 0 auto 15px; display: block;" />
+        <button type="submit"
+                style="display: block; margin: 0 auto; padding: 10px 20px; background-color: #4285F4; color: white; border: none; border-radius: 5px; cursor: pointer;"
+                th:text="#{mood.button}">Save
+        </button>
+    </form>
+
+    <!-- ✅ MOOD DISPLAY -->
+    <div th:if="${mood}" style="margin-top: 20px;">
+        <strong th:text="#{mood.display}">Your mood today:</strong> <span th:text="${mood}"></span>
     </div>
 </div>
 </body>

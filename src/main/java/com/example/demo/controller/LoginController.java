@@ -5,7 +5,6 @@ import com.example.demo.model.User;
 import com.example.demo.model.Admin;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.AdminRepository;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +46,7 @@ public class LoginController {
 
         if (user.isPresent() && passwordEncoder.matches(userDTO.getPassword(), user.get().getPassword())) {
             session.setAttribute("user", user.get().getUsername());
-            return "redirect:/login/welcome-user";  // ✅ Redirect to GET method
+            return "redirect:/login/welcome-user";
         }
 
         model.addAttribute("error", "Invalid credentials");
@@ -73,7 +72,7 @@ public class LoginController {
 
         if (existing.isPresent()) {
             session.setAttribute("admin", admin.getUsername());
-            session.setAttribute("isAdmin", true); // ✅ Required for Actuator access
+            session.setAttribute("isAdmin", true);
             return "redirect:/login/welcome-admin";
         }
 
@@ -81,7 +80,7 @@ public class LoginController {
         return "login-admin";
     }
 
-    // ----------- WELCOME PAGES -----------
+    // ----------- USER WELCOME PAGE -----------
 
     @GetMapping("/welcome-user")
     public String showWelcomeUser(HttpSession session,
@@ -89,13 +88,45 @@ public class LoginController {
                                   Model model) {
         String username = (String) session.getAttribute("user");
         if (username == null) {
-            return "redirect:/login/user";  // 🔐 Secure fallback
+            return "redirect:/login/user";
         }
 
         model.addAttribute("name", username);
-        model.addAttribute("currentUrl", request.getRequestURI()); // For language switch
+        model.addAttribute("currentUrl", request.getRequestURI());
+
+        userRepository.findAll().stream()
+                .filter(u -> u.getUsername().equals(username))
+                .findFirst()
+                .ifPresent(user -> model.addAttribute("mood", user.getMoodOfTheDay()));
+
         return "welcome-user";
     }
+
+    // ----------- MOOD SETTER (POST) -----------
+
+    @PostMapping("/set-mood")
+    public String setMood(@RequestParam String mood,
+                          HttpSession session,
+                          Model model) {
+        String username = (String) session.getAttribute("user");
+
+        if (username != null) {
+            userRepository.findAll().stream()
+                    .filter(u -> u.getUsername().equals(username))
+                    .findFirst()
+                    .ifPresent(user -> {
+                        user.setMoodOfTheDay(mood);
+                        userRepository.save(user);
+                    });
+
+            model.addAttribute("name", username);
+            model.addAttribute("mood", mood);
+        }
+
+        return "redirect:/login/welcome-user";
+    }
+
+    // ----------- ADMIN WELCOME PAGE -----------
 
     @GetMapping("/welcome-admin")
     public String showWelcomeAdmin(HttpSession session,

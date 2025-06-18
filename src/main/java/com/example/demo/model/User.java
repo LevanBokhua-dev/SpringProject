@@ -28,7 +28,16 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference // 👈 allow serialization
     private List<Todo> todos = new ArrayList<>();
+    @Column(name = "mood_of_the_day")
+    private String moodOfTheDay;
 
+    public String getMoodOfTheDay() {
+        return moodOfTheDay;
+    }
+
+    public void setMoodOfTheDay(String moodOfTheDay) {
+        this.moodOfTheDay = moodOfTheDay;
+    }
     // Getters and setters
     public Long getId() { return id; }
 
