@@ -39,11 +39,9 @@ public class TodoApiIntegrationTests {
     void setUp() {
         baseUrl = "http://localhost:" + port + "/api/todos/user";
 
-        // Clean existing test data
         todoRepository.deleteAll();
         userRepository.deleteAll();
 
-        // Create test user and to do
         User user = new User();
         user.setUsername("testuser");
         user.setEmail("test@example.com");
@@ -62,14 +60,12 @@ public class TodoApiIntegrationTests {
 
     @Test
     void shouldCreateTodoForUser() {
-        // 1. Create a user to associate with the new To do
         User user = new User();
         user.setUsername("apitestuser");
         user.setEmail("api@example.com");
         user.setPassword("pass123");
         user = userRepository.save(user);
 
-        // 2. Prepare To do JSON
         String todoJson = String.format(
                 "{\"title\":\"Test Via API\",\"description\":\"Created in test\",\"priority\":\"B\",\"user\":{\"id\":%d}}",
                 user.getId()
@@ -80,14 +76,11 @@ public class TodoApiIntegrationTests {
 
         HttpEntity<String> entity = new HttpEntity<>(todoJson, headers);
 
-        // 3. Send POST request
         ResponseEntity<String> response = restTemplate.postForEntity(
                 "http://localhost:" + port + "/api/todos/new", entity, String.class);
 
-        // 4. Check response
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        // 5. Check repository content
         List<Todo> todos = todoRepository.findAll();
         assertThat(todos).anyMatch(t -> t.getTitle().equals("Test Via API"));
     }

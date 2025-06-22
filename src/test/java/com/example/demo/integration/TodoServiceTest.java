@@ -42,10 +42,8 @@ public class TodoServiceTest {
         when(userRepository.findAll()).thenReturn(List.of(user));
         when(todoRepository.save(any(Todo.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        // when
         Todo savedTodo = todoService.saveTodoForUser(username, todo);
 
-        // then
         assertThat(savedTodo.getUser()).isEqualTo(user);
         assertThat(savedTodo.getTitle()).isEqualTo("Test TODO");
 

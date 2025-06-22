@@ -28,7 +28,6 @@ public class LoginController {
     @Autowired
     private AdminRepository adminRepository;
 
-    // ----------- USER LOGIN -----------
 
     @GetMapping("/user")
     public String showUserLogin(Model model) {
@@ -53,7 +52,6 @@ public class LoginController {
         return "login-user";
     }
 
-    // ----------- ADMIN LOGIN -----------
 
     @GetMapping("/admin")
     public String showAdminLogin(Model model) {
@@ -80,7 +78,6 @@ public class LoginController {
         return "login-admin";
     }
 
-    // ----------- USER WELCOME PAGE -----------
 
     @GetMapping("/welcome-user")
     public String showWelcomeUser(HttpSession session,
@@ -102,7 +99,6 @@ public class LoginController {
         return "welcome-user";
     }
 
-    // ----------- MOOD SETTER (POST) -----------
 
     @PostMapping("/set-mood")
     public String setMood(@RequestParam String mood,
@@ -126,7 +122,6 @@ public class LoginController {
         return "redirect:/login/welcome-user";
     }
 
-    // ----------- ADMIN WELCOME PAGE -----------
 
     @GetMapping("/welcome-admin")
     public String showWelcomeAdmin(HttpSession session,

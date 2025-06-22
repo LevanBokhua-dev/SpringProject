@@ -43,13 +43,11 @@ public class UserMoodIntegrationTests {
 
     @Test
     void shouldSaveMoodInDatabase() {
-        // Login user to get session
         HttpHeaders loginHeaders = new HttpHeaders();
         loginHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         HttpEntity<String> loginEntity = new HttpEntity<>("username=moodtester&password=test123", loginHeaders);
         ResponseEntity<String> loginResponse = restTemplate.postForEntity("http://localhost:" + port + "/login/user", loginEntity, String.class);
 
-        // Capture session ID
         String sessionCookie = loginResponse.getHeaders().getFirst(HttpHeaders.SET_COOKIE);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
